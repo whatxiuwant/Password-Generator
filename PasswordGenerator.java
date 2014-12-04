@@ -14,40 +14,89 @@ public class PasswordGenerator {
 	(9) check requirements: 1 upper, 1 lower, 1 numeric; if not repeat process
 	(10) return generated password
 */
-	private String password;
-	private int length;
-	private char[] characters = new char[62];
+	static String password = "";
+	static int length;
+	static char[] characters = new char[62];
 	
-	public PasswordGenerator(String password) {
-		this.password = password;
+	public static void main(String[] args) {
+		characters = generateAlphaNumericArray();
+		System.out.println(characters);
+		password = generatePw();
+		System.out.println(password);
 	}
 	
-	public String getPassword() {
+	public static String generatePw() {
+		length = generatePwLength();
+		password += getAlpha();
+		
+		for (int i = 0; i < length - 1; i++)
+			password += getAlphaNumeric();
+		
+		String sc = getSpecialCase();
+		int index = getSCIndex();
+		password = password.substring(0, index) + sc + password.substring(index);
+		
 		return password;
 	}
 	
-	public void generatePwLength() {
-		length = (int) Math.random() * 5 + 8;
-	}
-	
-	public int getPwLength() {
-		return length;
-	}
-	
-	public void generateAlphaNumericArray() {
-		for (char ch = 'a'; ch <= 'z'; ch++)
-			characters[ch - 'a'] = ch;
+	public static char[] generateAlphaNumericArray() {
 		for (char ch = 'A'; ch <= 'Z'; ch++)
-			characters[ch - 'A' + 26] = ch;
+			characters[ch - 'A'] = ch;
+		for (char ch = 'a'; ch <= 'z'; ch++)
+			characters[ch - 'a' + 26] = ch;
 		for (char ch = '0'; ch <= '9'; ch++)
 			characters[ch - '0' + 52] = ch;
+		
+		return characters;
 	}
 	
-	public char getAlpha() {
-		return characters[(int) Math.random()*51];
+	public static int generatePwLength() {
+		return (int) Math.random() * 5 + 8;
 	}
 	
-	public char getAlphaNumeric(char[] array) {
-		return characters[(int) Math.random()*61];
+	public static char getAlpha() {
+		return characters[(int) (Math.random() * 51)];
 	}
+	
+	public static char getAlphaNumeric() {
+		return characters[(int) (Math.random() * 61)];
+	}
+	
+	public static boolean hasLower(String pw) {
+		for (int i = 0; i < length - 1; i++)
+			if (pw.charAt(i) >= 'a' && pw.charAt(i) <= 'z')
+				return true;
+		return false;
+	}
+	
+	public static boolean hasUpper(String pw) {
+		for (int i = 0; i < length - 1; i++)
+			if (pw.charAt(i) >= 'A' && pw.charAt(i) <= 'Z')
+				return true;
+		return false;
+	}
+	
+	public static boolean hasNumeric(String pw) {
+		for (int i = 0; i < length - 1; i++)
+			if (pw.charAt(i) >= '0' && pw.charAt(i) <= '9')
+				return true;
+		return false;
+	}
+	
+	public static String getSpecialCase() {
+		int random = (int) Math.random() * 2;
+		
+		if (random == 0)
+			return "_";
+		else
+			return "-";
+	}
+	
+	public static int getSCIndex() {
+		return length;	//can't be first or last index;
+	}
+	/*
+	public static boolean isValidPw(String pw) {
+		
+	}*/
 }
