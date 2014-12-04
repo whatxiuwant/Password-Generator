@@ -21,7 +21,12 @@ public class PasswordGenerator {
 	public static void main(String[] args) {
 		characters = generateAlphaNumericArray();
 		System.out.println(characters);
+		
 		password = generatePw();
+		System.out.println(password);
+		
+		if (!isValidPassword(password))
+			password = generatePw();
 		System.out.println(password);
 	}
 	
@@ -93,10 +98,17 @@ public class PasswordGenerator {
 	}
 	
 	public static int getSCIndex() {
-		return length;	//can't be first or last index;
-	}
-	/*
-	public static boolean isValidPw(String pw) {
+		int index = (int) (Math.random() * length - 1);
 		
-	}*/
+		if (index == 0 || index == length)
+			index = (int) (Math.random() * length - 1);
+			
+		return index;	//can't be first or last index;
+	}
+	
+	public static boolean isValidPw(String pw) {
+		if (hasLower(pw) && hasUpper(pw) && hasNumeric(pw))
+			return true;
+		return false;
+	}
 }
