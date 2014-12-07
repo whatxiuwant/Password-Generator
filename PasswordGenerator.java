@@ -1,15 +1,16 @@
 package pgpkg;
-import java.awt.Font;
-import java.awt.Color;
+import java.awt.*;
 import javax.swing.*;
-import javax.swing.plaf.FontUIResource;
+import java.io.*;
+import java.util.*;
 
 public class PasswordGenerator {
 	static String password = "";
 	static char[] characters = new char[62];		//char array of all possible pw characters
 	static int length = 0;
+	static ArrayList<String> passwords = new ArrayList<String>();
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		characters = generateAlphaNumericArray();
 		
 		password = generatePw();
@@ -18,10 +19,21 @@ public class PasswordGenerator {
 			password = "";
 			password = generatePw();
 		}
+		System.out.println(passwords);
+		passwords.add(password);
+		System.out.println(passwords);
+		for (int i = 0; i < passwords.size(); i++)
+			System.out.println(passwords.get(i));
 		
-		UIManager.put("OptionPane.messageFont", new FontUIResource(new Font("SanSerif", Font.PLAIN, 20)));
-		UIManager.put("OptionPane.messageForeground", Color.BLACK);
-		JOptionPane.showMessageDialog(null,"The password is: " + password + "\nThe password length is: " + length);
+		/*	Using message box:
+		 * 	UIManager.put("OptionPane.messageFont", new FontUIResource(new Font("SanSerif", Font.PLAIN, 20)));
+		 * 	UIManager.put("OptionPane.messageForeground", Color.BLACK);
+		 * 	JOptionPane.showMessageDialog(null,"The password is: " + password + "\nThe password length is: " + length);
+		*/
+		
+		PrintWriter pw = new PrintWriter(new FileOutputStream(new File("storedPasswords.txt"), true));
+		pw.println("Password: " + password + "\nPassword length: " + length + "\n");
+		pw.close();
 	}
 	
 	public static String generatePw() {
