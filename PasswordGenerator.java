@@ -8,7 +8,7 @@ public class PasswordGenerator {
 	static String password = "";
 	static char[] characters = new char[62];		//char array of all possible pw characters
 	static int length = 0;
-	static ArrayList<String> passwords = new ArrayList<String>();
+	static Set<String> passwords = new HashSet<String>();
 	
 	public static void main(String[] args) throws IOException {
 		characters = generateAlphaNumericArray();
@@ -19,11 +19,6 @@ public class PasswordGenerator {
 			password = "";
 			password = generatePw();
 		}
-		System.out.println(passwords);
-		passwords.add(password);
-		System.out.println(passwords);
-		for (int i = 0; i < passwords.size(); i++)
-			System.out.println(passwords.get(i));
 		
 		/*	Using message box:
 		 * 	UIManager.put("OptionPane.messageFont", new FontUIResource(new Font("SanSerif", Font.PLAIN, 20)));
@@ -31,9 +26,15 @@ public class PasswordGenerator {
 		 * 	JOptionPane.showMessageDialog(null,"The password is: " + password + "\nThe password length is: " + length);
 		*/
 		
-		PrintWriter pw = new PrintWriter(new FileOutputStream(new File("storedPasswords.txt"), true));
-		pw.println("Password: " + password + "\nPassword length: " + length + "\n");
+		File input = new File("storedPasswords.txt");
+		PrintWriter pw = new PrintWriter(new FileOutputStream(input, true));
+		pw.println(password);
 		pw.close();
+		
+		Scanner scan = new Scanner(input);
+		while(scan.hasNextLine())
+			passwords.add(new String(scan.nextLine()));
+		scan.close();
 	}
 	
 	public static String generatePw() {
