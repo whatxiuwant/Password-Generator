@@ -35,6 +35,11 @@ public class PasswordGenerator {
 		while(scan.hasNextLine())
 			passwords.add(new String(scan.nextLine()));
 		scan.close();
+		
+		PrintWriter pw = new PrintWriter(new FileOutputStream(input, true));
+		for (int i = 0; i < passwords.size() - 1; i++)
+			pw.println(passwords[i]);
+		pw.close();
 	}
 	
 	public static String generatePw() {
